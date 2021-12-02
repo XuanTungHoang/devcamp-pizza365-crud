@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import ConfirmOrder from "./ConfirmOrder";
 import { Button, ButtonToolbar } from "react-bootstrap";
+import axios from "axios";
 class AddOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      dsDoUong: [],
       isEdit: false,
       isShowModal: false,
       id: "",
@@ -27,6 +29,7 @@ class AddOrder extends Component {
   }
 
   componentDidMount() {
+    this.fetchData();
     if (this.props.order && this.props.isEdit) {
       this.setState({
         id: this.props.order.id,
@@ -50,6 +53,29 @@ class AddOrder extends Component {
       });
     }
   }
+
+  async fetchData() {
+    const res = await axios.get("http://42.115.221.44:8080/devcamp-pizza365/drinks");
+    const { data } = await res;
+    this.setState({ dsDoUong: data });
+  }
+
+  // fetchData = () => {
+  //   axios({
+  //     method: "get",
+  //     url: "http://42.115.221.44:8080/devcamp-pizza365/drinks",
+  //     data: null,
+  //   })
+  //     .then(res => {
+  //       console.log(res);
+  //       this.setState({
+  //         dsDoUong: res.data,
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
   onChange = event => {
     var target = event.target;
@@ -113,12 +139,12 @@ class AddOrder extends Component {
   };
 
   render() {
-    var { isEdit } = this.state;
+    var { isEdit, dsDoUong } = this.state;
     //  var elmCofirmModal = isShowModal ? <ConfirmOrder addingOrder={this.state} /> : "";
     let onHideModal = () => {
       this.setState({ isShowModal: false });
     };
-    // console.log(isShowModal);
+    console.log(dsDoUong);
     return (
       <div>
         {/* {isShowModal ? <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">{elmCofirmModal} </div> : ""} */}
@@ -312,8 +338,13 @@ class AddOrder extends Component {
                       onChange={this.onChange}
                     >
                       {!isEdit ? <option value="">chọn đồ uống</option> : ""}
-                      <option value="pepsi">PEPSI</option>
-                      <option value="coca">COCA</option>
+                      {dsDoUong.map((item, index) => (
+                        <option key={index} value={item.maNuocUong}>
+                          {item.maNuocUong}
+                        </option>
+                      ))}
+
+                      {/* <option value="coca">COCA</option> */}
                     </select>
                   </div>
                   <div className="form-group">

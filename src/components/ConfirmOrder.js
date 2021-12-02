@@ -24,7 +24,7 @@ class ConfirmOrder extends Component {
           <Modal.Title id="contained-modal-title-vcenter">Thong tin san pham</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">Form here</div>
+          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">Form confirm here</div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={this.props.onHide}>
