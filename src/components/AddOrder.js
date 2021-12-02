@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import ConfirmOrder from "./ConfirmOrder";
+import { Button, ButtonToolbar } from "react-bootstrap";
 class AddOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isEdit: false,
+      isShowModal: false,
       id: "",
       hoTen: "",
       email: "",
@@ -110,227 +113,246 @@ class AddOrder extends Component {
   };
 
   render() {
-    var { isEdit, isConfirm } = this.state;
-
+    var { isEdit } = this.state;
+    //  var elmCofirmModal = isShowModal ? <ConfirmOrder addingOrder={this.state} /> : "";
+    let onHideModal = () => {
+      this.setState({ isShowModal: false });
+    };
+    // console.log(isShowModal);
     return (
-      <div className="panel panel-warning">
-        <div className="panel-heading">
-          <h3 className="panel-title">
-            {isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm"}
-            <span className="fa fa-times-circle text-right ml-10" onClick={this.onCloseForm}></span>
-          </h3>
-        </div>
-        <div className="panel-body">
-          <form onSubmit={this.onSubmit}>
-            <div class="row">
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div className="form-group">
-                  <input type="hidden" className="form-control" name="id" value={this.state.id} />
+      <div>
+        {/* {isShowModal ? <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">{elmCofirmModal} </div> : ""} */}
+        <div className="panel panel-warning">
+          <div className="panel-heading">
+            <h3 className="panel-title">
+              {isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm"}
+              <span className="fa fa-times-circle text-right ml-10" onClick={this.onCloseForm}></span>
+            </h3>
+          </div>
+          <div className="panel-body">
+            <form onSubmit={this.onSubmit}>
+              <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <div className="form-group">
+                    <input type="hidden" className="form-control" name="id" value={this.state.id} />
+                  </div>
+                  <div className="form-group">
+                    <label>Họ & Tên :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="hoTen"
+                      required="required"
+                      disabled={isEdit}
+                      value={this.state.hoTen}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Email :</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      name="email"
+                      disabled={isEdit}
+                      required="required"
+                      value={this.state.email}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Số điện thoại :</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="soDienThoai"
+                      required="required"
+                      disabled={isEdit}
+                      value={this.state.soDienThoai}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Địa chỉ :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="diaChi"
+                      required="required"
+                      disabled={isEdit}
+                      value={this.state.diaChi}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Lời nhắn :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="loiNhan"
+                      required="required"
+                      disabled={isEdit}
+                      value={this.state.loiNhan}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Trạng thái đơn hàng :</label>
+                    {/* <input type="text" className="form-control" name="trangthai" value="open" disabled={true} /> */}
+                    <select
+                      className="form-control"
+                      required="required"
+                      name="trangThai"
+                      disabled={!isEdit}
+                      value={this.state.trangThai}
+                      onChange={this.onChange}
+                    >
+                      <option value="open">Open</option>
+                      <option value="cancel">Cancel</option>
+                      <option value="confirmed">Confirmed</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Voucher Id :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="idVourcher"
+                      required="required"
+                      disabled={isEdit}
+                      value={this.state.idVourcher}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Thành tiền :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="thanhTien"
+                      value={this.state.thanhTien}
+                      disabled={true}
+                      onChange={this.onChange}
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Họ & Tên :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="hoTen"
-                    required="required"
-                    disabled={isEdit}
-                    value={this.state.hoTen}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Email :</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    name="email"
-                    disabled={isEdit}
-                    required="required"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Số điện thoại :</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    name="soDienThoai"
-                    required="required"
-                    disabled={isEdit}
-                    value={this.state.soDienThoai}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Địa chỉ :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="diaChi"
-                    required="required"
-                    disabled={isEdit}
-                    value={this.state.diaChi}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Lời nhắn :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="loiNhan"
-                    required="required"
-                    disabled={isEdit}
-                    value={this.state.loiNhan}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Trạng thái đơn hàng :</label>
-                  {/* <input type="text" className="form-control" name="trangthai" value="open" disabled="true" /> */}
-                  <select
-                    className="form-control"
-                    required="required"
-                    name="trangThai"
-                    disabled={!isEdit}
-                    value={this.state.trangThai}
-                    onChange={this.onChange}
-                  >
-                    <option value="open">Open</option>
-                    <option value="cancel">Cancel</option>
-                    <option value="confirmed">Confirmed</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Voucher Id :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="idVourcher"
-                    required="required"
-                    disabled={isEdit}
-                    value={this.state.idVourcher}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Thành tiền :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="thanhTien"
-                    value={this.state.thanhTien}
-                    disabled="true"
-                    onChange={this.onChange}
-                  />
-                </div>
-              </div>
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div className="form-group">
-                  <label>Loại pizza :</label>
-                  <select
-                    className="form-control required"
-                    required="required"
-                    disabled={isEdit}
-                    name="loaiPizza"
-                    value={this.state.loaiPizza}
-                    onChange={this.onChange}
-                  >
-                    {!isEdit ? <option value="">chọn loại pizza</option> : ""}
-                    <option value="Seafood">Seafood</option>
-                    <option value="Hawaii">Hawaii</option>
-                    <option value="Bacon">Bacon</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Cỡ combo :</label>
-                  <select
-                    className="form-control"
-                    required="required"
-                    disabled={isEdit}
-                    name="kichCo"
-                    value={this.state.kichCo}
-                    onChange={this.onChange}
-                  >
-                    <option value="S">S (small)</option>
-                    <option value="M">M (medium)</option>
-                    <option value="L">L (large)</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Đường kính Pizza :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="duongKinh"
-                    value={this.state.duongKinh}
-                    disabled="true"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Sườn nướng :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="suon"
-                    value={this.state.suon}
-                    disabled="true"
-                    onChange={this.onChange}
-                  />
-                </div>
+                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <div className="form-group">
+                    <label>Loại pizza :</label>
+                    <select
+                      className="form-control required"
+                      required="required"
+                      disabled={isEdit}
+                      name="loaiPizza"
+                      value={this.state.loaiPizza}
+                      onChange={this.onChange}
+                    >
+                      {!isEdit ? <option value="">chọn loại pizza</option> : ""}
+                      <option value="Seafood">Seafood</option>
+                      <option value="Hawaii">Hawaii</option>
+                      <option value="Bacon">Bacon</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Cỡ combo :</label>
+                    <select
+                      className="form-control"
+                      required="required"
+                      disabled={isEdit}
+                      name="kichCo"
+                      value={this.state.kichCo}
+                      onChange={this.onChange}
+                    >
+                      <option value="S">S (small)</option>
+                      <option value="M">M (medium)</option>
+                      <option value="L">L (large)</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Đường kính Pizza :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="duongKinh"
+                      value={this.state.duongKinh}
+                      disabled={true}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Sườn nướng :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="suon"
+                      value={this.state.suon}
+                      disabled={true}
+                      onChange={this.onChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Salad :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="salad"
-                    value={this.state.salad}
-                    disabled="true"
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Đồ uống :</label>
-                  <select
-                    className="form-control"
-                    required="required"
-                    disabled={isEdit}
-                    name="idLoaiNuocUong"
-                    value={this.state.idLoaiNuocUong}
-                    onChange={this.onChange}
-                  >
-                    {!isEdit ? <option value="">chọn đồ uống</option> : ""}
-                    <option value="pepsi">PEPSI</option>
-                    <option value="coca">COCA</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Số lượng nước uống :</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="soLuongNuoc"
-                    value={this.state.soLuongNuoc}
-                    disabled="true"
-                    onChange={this.onChange}
-                  />
+                  <div className="form-group">
+                    <label>Salad :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="salad"
+                      value={this.state.salad}
+                      disabled={true}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Đồ uống :</label>
+                    <select
+                      className="form-control"
+                      required="required"
+                      disabled={isEdit}
+                      name="idLoaiNuocUong"
+                      value={this.state.idLoaiNuocUong}
+                      onChange={this.onChange}
+                    >
+                      {!isEdit ? <option value="">chọn đồ uống</option> : ""}
+                      <option value="pepsi">PEPSI</option>
+                      <option value="coca">COCA</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Số lượng nước uống :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="soLuongNuoc"
+                      value={this.state.soLuongNuoc}
+                      disabled={true}
+                      onChange={this.onChange}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <br />
-            <div className="text-center">
-              <button type="submit" className="btn btn-warning">
-                Lưu Lại
-              </button>
-              &nbsp;
-              <button type="button" className="btn btn-danger" onClick={this.onCloseForm}>
-                Hủy Bỏ
-              </button>
-            </div>
-          </form>
+              <br />
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="btn btn-warning"
+                  // show={this.state.isShowModal}
+                  // onHide={this.onHideModal}
+                >
+                  Lưu Lại
+                </button>
+                {/* <ConfirmOrder show={this.state.isShowModal} onHide={this.onHideModal} /> */}
+                {/* <ButtonToolbar>
+                  <Button type="submit" variant="warning">
+                    Lưu Lại
+                  </Button>
+                  <ConfirmOrder show={this.state.isShowModal} onHide={this.onHideModal} />
+                </ButtonToolbar> */}
+                &nbsp;
+                <button type="button" className="btn btn-danger" onClick={this.onCloseForm}>
+                  Hủy Bỏ
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     );

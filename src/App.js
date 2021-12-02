@@ -13,6 +13,7 @@ class App extends Component {
       orders: [],
       isDisplayForm: false,
       isEdit: false,
+      isShowModal: false,
       orderEditing: [],
       keyword: "",
       filterSize: "All",
@@ -51,6 +52,7 @@ class App extends Component {
     this.setState({
       isDisplayForm: false,
       isEdit: false,
+      isShowModal: false,
     });
   };
 
@@ -122,11 +124,13 @@ class App extends Component {
     this.onShowForm();
   };
 
-  // onSearch = keyword => {
-  //   this.setState({
-  //     keyword: keyword.toLowerCase(),
-  //   });
-  // };
+  onSearch = keyword => {
+    //  keyword = keyword.parseString();
+    console.log(keyword);
+    this.setState({
+      keyword: keyword,
+    });
+  };
 
   onFiltered = (filterSize, filterStatus) => {
     this.setState({
@@ -153,6 +157,12 @@ class App extends Component {
         } else {
           return order.trangThai.toLowerCase().indexOf(filterStatus) !== -1;
         }
+      });
+    }
+    if (keyword) {
+      console.log(orders);
+      orders = orders.filter(order => {
+        return order.soDienThoai.indexOf(keyword) !== -1;
       });
     }
     var elmAddForm = isDisplayForm ? (
