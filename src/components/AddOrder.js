@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 class AddOrder extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +10,7 @@ class AddOrder extends Component {
       soDienThoai: "",
       diaChi: "",
       loiNhan: "",
-      trangthai: "",
+      trangThai: "",
       idVourcher: "",
       thanhTien: "150000",
       loaiPizza: "",
@@ -25,7 +24,7 @@ class AddOrder extends Component {
   }
 
   componentDidMount() {
-    if (this.props.order) {
+    if (this.props.order && this.props.isEdit) {
       this.setState({
         id: this.props.order.id,
         orderId: this.props.order.orderId,
@@ -34,7 +33,7 @@ class AddOrder extends Component {
         soDienThoai: this.props.order.soDienThoai,
         diaChi: this.props.order.diaChi,
         loiNhan: this.props.order.loiNhan,
-        trangthai: this.props.order.trangThai,
+        trangThai: this.props.order.trangThai,
         idVourcher: this.props.order.idVourcher,
         thanhTien: this.props.order.thanhTien,
         loaiPizza: this.props.order.loaiPizza,
@@ -111,7 +110,8 @@ class AddOrder extends Component {
   };
 
   render() {
-    var { isEdit } = this.state;
+    var { isEdit, isConfirm } = this.state;
+
     return (
       <div className="panel panel-warning">
         <div className="panel-heading">
@@ -193,14 +193,14 @@ class AddOrder extends Component {
                   <select
                     className="form-control"
                     required="required"
-                    name="trangthai"
+                    name="trangThai"
                     disabled={!isEdit}
-                    value={this.state.trangthai}
+                    value={this.state.trangThai}
                     onChange={this.onChange}
                   >
                     <option value="open">Open</option>
-                    <option value="cancel">Đã hủy</option>
-                    <option value="confirmed">Đã xác nhận</option>
+                    <option value="cancel">Cancel</option>
+                    <option value="confirmed">Confirmed</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -239,9 +239,9 @@ class AddOrder extends Component {
                     onChange={this.onChange}
                   >
                     {!isEdit ? <option value="">chọn loại pizza</option> : ""}
-                    <option value="Seafood">Hải sản</option>
+                    <option value="Seafood">Seafood</option>
                     <option value="Hawaii">Hawaii</option>
-                    <option value="Bacon">Thịt hun khói</option>
+                    <option value="Bacon">Bacon</option>
                   </select>
                 </div>
                 <div className="form-group">

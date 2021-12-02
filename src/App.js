@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import AddOrder from "./components/AddOrder";
 import SearchAndFilter from "./components/SearchAndFilter";
 import OrderList from "./components/OrderList";
+//import ConfirmOrder from "./components/ConfirmOrder";
 import axios from "axios";
 
 class App extends Component {
@@ -60,7 +61,7 @@ class App extends Component {
   };
 
   onSubmit = data => {
-    const lastData = { trangThai: data.trangthai };
+    const lastData = { trangThai: data.trangThai };
     if (data.isEdit) {
       axios({
         method: "put",
@@ -128,13 +129,10 @@ class App extends Component {
   // };
 
   onFiltered = (filterSize, filterStatus) => {
-    // console.log(filterSize, filterStatus);
-    //filterStatus = parseInt(filterStatus);
     this.setState({
       filterSize: filterSize.toLowerCase(),
       filterStatus: filterStatus.toLowerCase(),
     });
-    //  console.log(typeof filterStatus);
   };
 
   render() {
