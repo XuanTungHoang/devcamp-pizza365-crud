@@ -136,12 +136,11 @@ class AddOrder extends Component {
     const res = await axios.get(
       `http://42.115.221.44:8080/devcamp-voucher-api/voucher_detail/${this.state.idVourcher}`
     );
-    if (res.status !== 200) {
-      setTimeout(() => this.setState({ vourcher: [] }), 3000);
-      //  this.setState({ vourcher: [] });
-    } else {
+    try {
       var { data } = await res;
       this.setState({ vourcher: data });
+    } catch (e) {
+      this.setState({ vourcher: [] });
     }
   }
 
