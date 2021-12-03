@@ -5,3 +5,6 @@ div.fade.in.modal {
 .modal-dialog {
   margin: 30vh auto 0px auto;
 }
+.btn-close {
+  display:none;
+}
