@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ConfirmOrder from "./ConfirmOrder";
 import { Button, ButtonToolbar } from "react-bootstrap";
+import { Modal, Row, Col, Form } from "react-bootstrap";
+
 import axios from "axios";
 class AddOrder extends Component {
   constructor(props) {
@@ -55,7 +57,9 @@ class AddOrder extends Component {
   }
 
   async fetchData() {
-    const res = await axios.get("http://42.115.221.44:8080/devcamp-pizza365/drinks");
+    const res = await axios.get(
+      "http://42.115.221.44:8080/devcamp-pizza365/drinks"
+    );
     const { data } = await res;
     this.setState({ dsDoUong: data });
   }
@@ -77,7 +81,7 @@ class AddOrder extends Component {
   //     });
   // };
 
-  onChange = event => {
+  onChange = (event) => {
     var target = event.target;
     var name = target.name;
     var value = target.value;
@@ -128,7 +132,7 @@ class AddOrder extends Component {
     }
   };
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     event.preventDefault();
     this.props.onSubmit(this.state);
     this.onCloseForm();
@@ -152,7 +156,10 @@ class AddOrder extends Component {
           <div className="panel-heading">
             <h3 className="panel-title">
               {isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm"}
-              <span className="fa fa-times-circle text-right ml-10" onClick={this.onCloseForm}></span>
+              <span
+                className="fa fa-times-circle text-right ml-10"
+                onClick={this.onCloseForm}
+              ></span>
             </h3>
           </div>
           <div className="panel-body">
@@ -160,7 +167,12 @@ class AddOrder extends Component {
               <div class="row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group">
-                    <input type="hidden" className="form-control" name="id" value={this.state.id} />
+                    <input
+                      type="hidden"
+                      className="form-control"
+                      name="id"
+                      value={this.state.id}
+                    />
                   </div>
                   <div className="form-group">
                     <label>Họ & Tên :</label>
@@ -367,9 +379,14 @@ class AddOrder extends Component {
                   className="btn btn-warning"
                   // show={this.state.isShowModal}
                   // onHide={this.onHideModal}
+                  onClick={() => {
+                    this.setState({ isShowModal: true });
+                    console.log("SaveState", this.state);
+                  }}
                 >
                   Lưu Lại
                 </button>
+                {this.state.isShowModal && <ConfirmOrder />}
                 {/* <ConfirmOrder show={this.state.isShowModal} onHide={this.onHideModal} /> */}
                 {/* <ButtonToolbar>
                   <Button type="submit" variant="warning">
@@ -378,7 +395,11 @@ class AddOrder extends Component {
                   <ConfirmOrder show={this.state.isShowModal} onHide={this.onHideModal} />
                 </ButtonToolbar> */}
                 &nbsp;
-                <button type="button" className="btn btn-danger" onClick={this.onCloseForm}>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={this.onCloseForm}
+                >
                   Hủy Bỏ
                 </button>
               </div>

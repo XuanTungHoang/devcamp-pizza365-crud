@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
+
 class ConfirmOrder extends Component {
   constructor(props) {
     super(props);
@@ -19,17 +20,14 @@ class ConfirmOrder extends Component {
     //  var { order } = this.props;
 
     return (
-      <Modal {...this.props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={true} onHide={false} style={{ opacity: 1 }}>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Thong tin san pham</Modal.Title>
+          <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">Form confirm here</div>
-        </Modal.Body>
+        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={this.props.onHide}>
-            Close
-          </Button>
+          <Button variant="secondary">Close</Button>
+          <Button variant="primary">Save Changes</Button>
         </Modal.Footer>
       </Modal>
     );
