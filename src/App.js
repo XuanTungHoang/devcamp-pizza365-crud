@@ -7,6 +7,7 @@ import axios from "axios";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Modal, Button } from "react-bootstrap";
 
 class App extends Component {
   constructor(props) {
@@ -21,11 +22,20 @@ class App extends Component {
       filterSize: "All",
       filterStatus: "All",
       show: false,
+      isShowDelete: false,
     };
   }
-  showModal = (e) => {
+
+  onShowDelete = () => {
+    //  var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
     this.setState({
-      show: true,
+      isShowDelete: true,
+    });
+  };
+
+  onCloseDelete = () => {
+    this.setState({
+      isShowDelete: false,
     });
   };
 
@@ -119,6 +129,7 @@ class App extends Component {
       });
 
     this.onCloseForm();
+    this.onCloseDelete();
     toast("Đã xoá đơn hàng thành công!");
   };
 
@@ -198,14 +209,27 @@ class App extends Component {
 
     return (
       <div className="main" style={{ paddingLeft: "20px" }}>
-        <button
-          onClick={(e) => {
-            this.showModal();
-          }}
-        >
-          show modal
-        </button>
         <ToastContainer />
+        <Modal
+          style={{ opacity: 1 }}
+          show={this.state.isShowDelete}
+          onHide={this.onCloseDelete}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Xác nhận xoá đơn hàng</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Bạn có chắc chắn xoá đơn hàng không?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.onCloseDelete}>
+              Không
+            </Button>
+            <Button variant="primary" onClick={this.onDelete}>
+              Có
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <div className="text-center">
           <h1>Danh sách đơn hàng</h1>
@@ -234,7 +258,7 @@ class App extends Component {
               <div style={{ marginTop: "20px" }}>
                 <OrderList
                   orders={orders}
-                  onDelete={this.onDelete}
+                  onDelete={this.onShowDelete}
                   onEditOrder={this.onEditOrder}
                 />
               </div>
