@@ -140,9 +140,10 @@ class AddOrder extends Component {
   };
 
   onShowModal = () => {
-    //  var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
+    var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
+    console.log(isValidate);
     this.setState({
-      isShowModal: true,
+      isShowModal: isValidate,
     });
   };
 
@@ -154,14 +155,8 @@ class AddOrder extends Component {
 
   render() {
     var { isEdit, dsDoUong } = this.state;
-    //  var elmCofirmModal = isShowModal ? <ConfirmOrder addingOrder={this.state} /> : "";
-    let onHideModal = () => {
-      this.setState({ isShowModal: false });
-    };
-    console.log(dsDoUong);
     return (
       <div>
-        {/* {isShowModal ? <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">{elmCofirmModal} </div> : ""} */}
         <div className="panel panel-warning">
           <div className="panel-heading">
             <h3 className="panel-title">
@@ -376,14 +371,15 @@ class AddOrder extends Component {
               </div>
               <br />
               <div className="text-center">
-                <button
-                  className="btn btn-warning"
-                  // show={this.state.isShowModal}
-                  // onHide={this.onHideModal}
-                  onClick={this.onShowModal}
-                >
-                  Lưu Lại
-                </button>
+                {isEdit ? (
+                  <button type="submit" className="btn btn-warning">
+                    Lưu Lại
+                  </button>
+                ) : (
+                  <button onClick={this.onShowModal} className="btn btn-primary">
+                    Lưu Lại
+                  </button>
+                )}
                 <Modal
                   style={{ opacity: 1 }}
                   show={this.state.isShowModal}
@@ -399,7 +395,7 @@ class AddOrder extends Component {
                     <Button variant="secondary" onClick={this.onCloseModal}>
                       Close
                     </Button>
-                    <Button variant="primary">Understood</Button>
+                    <Button variant="primary">Confirm</Button>
                   </Modal.Footer>
                 </Modal>
                 &nbsp;
