@@ -140,9 +140,9 @@ class AddOrder extends Component {
   };
 
   onShowModal = () => {
-    var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
+    //  var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
     this.setState({
-      isShowModal: isValidate,
+      isShowModal: true,
     });
   };
 
