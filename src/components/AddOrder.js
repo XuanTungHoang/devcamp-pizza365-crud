@@ -8,6 +8,7 @@ class AddOrder extends Component {
     super(props);
     this.state = {
       dsDoUong: [],
+      vourcher: [],
       isEdit: false,
       isShowModal: false,
       isSave: false,
@@ -130,9 +131,26 @@ class AddOrder extends Component {
     }
   };
 
+  async checkVourcher() {
+    //  console.log(id);
+    const res = await axios.get(
+      `http://42.115.221.44:8080/devcamp-voucher-api/voucher_detail/${this.state.idVourcher}`
+    );
+    if (res.status !== 200) {
+      setTimeout(() => this.setState({ vourcher: [] }), 3000);
+      //  this.setState({ vourcher: [] });
+    } else {
+      var { data } = await res;
+      this.setState({ vourcher: data });
+    }
+  }
+
   onHandleSubmit = event => {
     event.preventDefault();
+
     if (!this.state.isEdit) {
+      this.checkVourcher();
+      console.log(this.state.vourcher);
       this.setState({
         isShowModal: true,
       });
@@ -168,11 +186,16 @@ class AddOrder extends Component {
   };
 
   render() {
-    var { isEdit, dsDoUong, isShowModal, isSave } = this.state;
+    var { isEdit, dsDoUong, isShowModal, vourcher } = this.state;
+    var giamGia = vourcher.phanTramGiamGia ? vourcher.phanTramGiamGia : "0";
+    // var tongTien = this.state.thanhTien;
+    // var tongTien = Number.parseInt(tongTien, 10);
+    //  console.log(vourcher);
+    var thanhTien = (Number.parseInt(this.state.thanhTien, 10) * (100 - Number.parseInt(giamGia, 10))) / 100;
     var val = `Xác nhận: ${this.state.hoTen}, Số điện thoại: ${this.state.soDienThoai}, địa chỉ: ${this.state.diaChi}  \n
 Menu: ${this.state.kichCo}, sườn nướng: ${this.state.suon}, salad: ${this.state.salad}g, loại nước uống: ${this.state.idLoaiNuocUong}\n
 Loại pizza: ${this.state.loaiPizza}, giá: ${this.state.thanhTien}, Mã giảm giá: ${this.state.idVourcher}\n
-Phải thanh toán: ${this.state.thanhTien} vnd`;
+Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
     return (
       <div>
         <div className="panel panel-warning">
@@ -268,7 +291,7 @@ Phải thanh toán: ${this.state.thanhTien} vnd`;
                   <div className="form-group">
                     <label>Voucher Id :</label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       name="idVourcher"
                       required="required"
