@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
 import "./global.css";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 class AddOrder extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +61,9 @@ class AddOrder extends Component {
   }
 
   async fetchData() {
-    const res = await axios.get("http://42.115.221.44:8080/devcamp-pizza365/drinks");
+    const res = await axios.get(
+      "http://42.115.221.44:8080/devcamp-pizza365/drinks"
+    );
     const { data } = await res;
     this.setState({ dsDoUong: data });
   }
@@ -80,7 +85,7 @@ class AddOrder extends Component {
   //     });
   // };
 
-  onChange = event => {
+  onChange = (event) => {
     var target = event.target;
     var name = target.name;
     var value = target.value;
@@ -94,8 +99,7 @@ class AddOrder extends Component {
           soLuongNuoc: "2",
           thanhTien: "150000",
         };
-      }
-      if (value === "M") {
+      } else if (value === "M") {
         pickedSize = {
           duongKinh: "25",
           suon: "4",
@@ -103,14 +107,21 @@ class AddOrder extends Component {
           soLuongNuoc: "3",
           thanhTien: "200000",
         };
-      }
-      if (value === "L") {
+      } else if (value === "L") {
         pickedSize = {
           duongKinh: "30",
           suon: "8",
           salad: "500",
           soLuongNuoc: "4",
           thanhTien: "250000",
+        };
+      } else {
+        pickedSize = {
+          duongKinh: "1",
+          suon: "1",
+          salad: "1",
+          soLuongNuoc: "1",
+          thanhTien: "1",
         };
       }
     }
@@ -144,16 +155,38 @@ class AddOrder extends Component {
     }
   }
 
-  onHandleSubmit = event => {
+  onHandleSubmit = (event) => {
     event.preventDefault();
 
     if (!this.state.isEdit) {
-      this.checkVourcher();
-      console.log(this.state.vourcher);
-      this.setState({
-        isShowModal: true,
-      });
+      axios({
+        method: "get",
+        url: `http://42.115.221.44:8080/devcamp-voucher-api/voucher_detail/${this.state.idVourcher}`,
+      })
+        .then((res) => {
+          console.log("api res", res);
+          var { data } = res;
+          this.setState({ vourcher: data });
+          console.log("data voucher", this.state.vourcher);
+          this.setState({
+            isShowModal: true,
+          });
+        })
+        .catch((err) => {
+          console.log("api err", err);
+          var data = {
+            phanTramGiamGia: "0",
+          };
+          console.log("data", data);
+          this.setState({ vourcher: data });
+          console.log("data voucher err", this.state.vourcher);
+          this.setState({
+            isShowModal: true,
+          });
+          toast.error("Mã giảm giá chưa hợp lệ!");
+        });
     } else {
+      console.log("before submit: ");
       this.props.onSubmit(this.state);
       this.onCloseForm();
     }
@@ -190,7 +223,10 @@ class AddOrder extends Component {
     // var tongTien = this.state.thanhTien;
     // var tongTien = Number.parseInt(tongTien, 10);
     //  console.log(vourcher);
-    var thanhTien = (Number.parseInt(this.state.thanhTien, 10) * (100 - Number.parseInt(giamGia, 10))) / 100;
+    var thanhTien =
+      (Number.parseInt(this.state.thanhTien, 10) *
+        (100 - Number.parseInt(giamGia, 10))) /
+      100;
     var val = `Xác nhận: ${this.state.hoTen}, Số điện thoại: ${this.state.soDienThoai}, địa chỉ: ${this.state.diaChi}  \n
 Menu: ${this.state.kichCo}, sườn nướng: ${this.state.suon}, salad: ${this.state.salad}g, loại nước uống: ${this.state.idLoaiNuocUong}\n
 Loại pizza: ${this.state.loaiPizza}, giá: ${this.state.thanhTien}, Mã giảm giá: ${this.state.idVourcher}\n
@@ -198,10 +234,14 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
     return (
       <div>
         <div className="panel panel-warning">
+          <ToastContainer />
           <div className="panel-heading">
             <h3 className="panel-title">
               {isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm"}
-              <span className="fa fa-times-circle text-right ml-10" onClick={this.onCloseForm}></span>
+              <span
+                className="fa fa-times-circle text-right ml-10"
+                onClick={this.onCloseForm}
+              ></span>
             </h3>
           </div>
           <div className="panel-body">
@@ -209,7 +249,12 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
               <div class="row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group">
-                    <input type="hidden" className="form-control" name="id" value={this.state.id} />
+                    <input
+                      type="hidden"
+                      className="form-control"
+                      name="id"
+                      value={this.state.id}
+                    />
                   </div>
                   <div className="form-group">
                     <label>Họ & Tên :</label>
@@ -238,7 +283,7 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
                   <div className="form-group">
                     <label>Số điện thoại :</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       name="soDienThoai"
                       required="required"
@@ -338,6 +383,7 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
                       value={this.state.kichCo}
                       onChange={this.onChange}
                     >
+                      {!isEdit ? <option value="">chọn cỡ</option> : ""}
                       <option value="S">S (small)</option>
                       <option value="M">M (medium)</option>
                       <option value="L">L (large)</option>
@@ -493,7 +539,12 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
                         </div>
                         <div className="form-group">
                           <label>Thông tin chi tiết :</label>
-                          <textarea rows="9" className="form-control" disabled={true} value={val}></textarea>
+                          <textarea
+                            rows="9"
+                            className="form-control"
+                            disabled={true}
+                            value={val}
+                          ></textarea>
                         </div>
                       </div>
                     </form>
@@ -508,7 +559,11 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
                   </Modal.Footer>
                 </Modal>
                 &nbsp;
-                <button type="button" className="btn btn-danger" onClick={this.onCloseForm}>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={this.onCloseForm}
+                >
                   Hủy Bỏ
                 </button>
               </div>
