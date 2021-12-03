@@ -118,11 +118,17 @@ class AddOrder extends Component {
       });
     } else {
       this.setState({
-        duongKinh: pickedSize.duongKinh ? pickedSize.duongKinh : "",
-        suon: pickedSize.suon ? pickedSize.suon : "",
-        salad: pickedSize.salad ? pickedSize.salad : "",
-        soLuongNuoc: pickedSize.soLuongNuoc ? pickedSize.soLuongNuoc : "",
-        thanhTien: pickedSize.thanhTien ? pickedSize.thanhTien : "",
+        duongKinh: pickedSize.duongKinh
+          ? pickedSize.duongKinh
+          : this.state.duongKinh,
+        suon: pickedSize.suon ? pickedSize.suon : this.state.suon,
+        salad: pickedSize.salad ? pickedSize.salad : this.state.salad,
+        soLuongNuoc: pickedSize.soLuongNuoc
+          ? pickedSize.soLuongNuoc
+          : this.state.soLuongNuoc,
+        thanhTien: pickedSize.thanhTien
+          ? pickedSize.thanhTien
+          : this.state.thanhTien,
         [name]: value,
       });
     }
