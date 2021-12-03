@@ -23,17 +23,18 @@ class AddOrder extends Component {
       loiNhan: "",
       trangThai: "",
       idVourcher: "",
-      thanhTien: "150000",
+      thanhTien: "",
       loaiPizza: "",
-      kichCo: "S",
-      duongKinh: "20",
-      suon: "2",
-      salad: "200",
+      kichCo: "",
+      duongKinh: "",
+      suon: "",
+      salad: "",
       idLoaiNuocUong: "",
-      soLuongNuoc: "2",
+      soLuongNuoc: "",
     };
   }
 
+  //chạy lần đầu khi hiện component
   componentDidMount() {
     this.fetchData();
     if (this.props.order && this.props.isEdit) {
@@ -60,6 +61,7 @@ class AddOrder extends Component {
     }
   }
 
+  //lấy tất cả đồ uống
   async fetchData() {
     const res = await axios.get(
       "http://42.115.221.44:8080/devcamp-pizza365/drinks"
@@ -68,23 +70,7 @@ class AddOrder extends Component {
     this.setState({ dsDoUong: data });
   }
 
-  // fetchData = () => {
-  //   axios({
-  //     method: "get",
-  //     url: "http://42.115.221.44:8080/devcamp-pizza365/drinks",
-  //     data: null,
-  //   })
-  //     .then(res => {
-  //       console.log(res);
-  //       this.setState({
-  //         dsDoUong: res.data,
-  //       });
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
-
+  //nhận biết thay đổi khi nhập vào các trường
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -117,11 +103,11 @@ class AddOrder extends Component {
         };
       } else {
         pickedSize = {
-          duongKinh: "1",
-          suon: "1",
-          salad: "1",
-          soLuongNuoc: "1",
-          thanhTien: "1",
+          duongKinh: "0",
+          suon: "0",
+          salad: "0",
+          soLuongNuoc: "0",
+          thanhTien: "0",
         };
       }
     }
@@ -132,29 +118,17 @@ class AddOrder extends Component {
       });
     } else {
       this.setState({
-        duongKinh: pickedSize.duongKinh ? pickedSize.duongKinh : "20",
-        suon: pickedSize.suon ? pickedSize.suon : "2",
-        salad: pickedSize.salad ? pickedSize.salad : "200",
-        soLuongNuoc: pickedSize.soLuongNuoc ? pickedSize.soLuongNuoc : "2",
-        thanhTien: pickedSize.thanhTien ? pickedSize.thanhTien : "150000",
+        duongKinh: pickedSize.duongKinh ? pickedSize.duongKinh : "",
+        suon: pickedSize.suon ? pickedSize.suon : "",
+        salad: pickedSize.salad ? pickedSize.salad : "",
+        soLuongNuoc: pickedSize.soLuongNuoc ? pickedSize.soLuongNuoc : "",
+        thanhTien: pickedSize.thanhTien ? pickedSize.thanhTien : "",
         [name]: value,
       });
     }
   };
 
-  async checkVourcher() {
-    //  console.log(id);
-    const res = await axios.get(
-      `http://42.115.221.44:8080/devcamp-voucher-api/voucher_detail/${this.state.idVourcher}`
-    );
-    try {
-      var { data } = await res;
-      this.setState({ vourcher: data });
-    } catch (e) {
-      this.setState({ vourcher: [] });
-    }
-  }
-
+  //kiểm tra thêm đơn hàng mới hoặc sửa đơn hàng cũ
   onHandleSubmit = (event) => {
     event.preventDefault();
 
@@ -192,6 +166,7 @@ class AddOrder extends Component {
     }
   };
 
+  //Xác nhận và gửi đăng kí đơn hàng
   onSubmit = () => {
     this.props.onSubmit(this.state);
     this.onCloseForm();
@@ -201,6 +176,7 @@ class AddOrder extends Component {
     this.props.onCloseForm();
   };
 
+  //hiên modal
   onShowModal = () => {
     var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
     //  console.log(isValidate);
@@ -211,6 +187,7 @@ class AddOrder extends Component {
     });
   };
 
+  //đóng modal
   onCloseModal = () => {
     this.setState({
       isShowModal: false,
@@ -218,11 +195,10 @@ class AddOrder extends Component {
   };
 
   render() {
+    //  tính tiền kèm mã giảm giá
     var { isEdit, dsDoUong, isShowModal, vourcher } = this.state;
     var giamGia = vourcher.phanTramGiamGia ? vourcher.phanTramGiamGia : "0";
-    // var tongTien = this.state.thanhTien;
-    // var tongTien = Number.parseInt(tongTien, 10);
-    //  console.log(vourcher);
+
     var thanhTien =
       (Number.parseInt(this.state.thanhTien, 10) *
         (100 - Number.parseInt(giamGia, 10))) /
@@ -234,6 +210,7 @@ Phải thanh toán: ${thanhTien} vnd (Giảm giá ${giamGia}%)`;
     return (
       <div>
         <div className="panel panel-warning">
+          {/* Toast hiện thông báo */}
           <ToastContainer />
           <div className="panel-heading">
             <h3 className="panel-title">

@@ -27,7 +27,8 @@ class App extends Component {
     };
   }
 
-  onShowDelete = id => {
+  //hiện xác nhận xoá
+  onShowDelete = (id) => {
     //  var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
     this.setState({
       isShowDelete: true,
@@ -35,6 +36,7 @@ class App extends Component {
     });
   };
 
+  //ẩn xác nhận xoá
   onCloseDelete = () => {
     this.setState({
       isShowDelete: false,
@@ -51,13 +53,13 @@ class App extends Component {
       url: "http://42.115.221.44:8080/devcamp-pizza365/orders",
       data: null,
     })
-      .then(res => {
+      .then((res) => {
         console.log(res);
         this.setState({
           orders: res.data,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -83,7 +85,8 @@ class App extends Component {
     });
   };
 
-  onSubmit = data => {
+  //kiểm tra thêm mới đơn hàng hoặc sửa đơn hàng
+  onSubmit = (data) => {
     const lastData = { trangThai: data.trangThai };
     if (data.isEdit) {
       axios({
@@ -91,11 +94,11 @@ class App extends Component {
         url: `http://42.115.221.44:8080/devcamp-pizza365/orders/${data.id}`,
         data: lastData,
       })
-        .then(res => {
+        .then((res) => {
           this.fetchData();
           console.log(res);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
       console.log("sua");
@@ -106,17 +109,18 @@ class App extends Component {
         url: "http://42.115.221.44:8080/devcamp-pizza365/orders",
         data: data,
       })
-        .then(res => {
+        .then((res) => {
           this.fetchData();
           console.log(res);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
       toast("Đã thêm đơn hàng thành công!");
     }
   };
 
+  //xoá đơn hàng
   onDelete = () => {
     console.log(this.state.idDelete);
     axios({
@@ -124,11 +128,11 @@ class App extends Component {
       url: `http://42.115.221.44:8080/devcamp-pizza365/orders/${this.state.idDelete}`,
       data: null,
     })
-      .then(res => {
+      .then((res) => {
         this.fetchData();
         console.log(res);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 
@@ -137,7 +141,7 @@ class App extends Component {
     toast("Đã xoá đơn hàng thành công!");
   };
 
-  onEditOrder = id => {
+  onEditOrder = (id) => {
     var { orders } = this.state;
     orders.forEach((order, index) => {
       if (order.id === id) {
@@ -151,7 +155,8 @@ class App extends Component {
     this.onShowForm();
   };
 
-  onSearch = keyword => {
+  //tìm kiếm theo từ khoá
+  onSearch = (keyword) => {
     //  keyword = keyword.parseString();
     console.log(keyword);
     this.setState({
@@ -159,6 +164,7 @@ class App extends Component {
     });
   };
 
+  //bộ lọc
   onFiltered = (filterSize, filterStatus) => {
     this.setState({
       filterSize: filterSize.toLowerCase(),
@@ -167,10 +173,20 @@ class App extends Component {
   };
 
   render() {
-    var { orders, isDisplayForm, orderEditing, isEdit, filterSize, filterStatus, keyword } = this.state;
+    var {
+      orders,
+      isDisplayForm,
+      orderEditing,
+      isEdit,
+      filterSize,
+      filterStatus,
+      keyword,
+    } = this.state;
     console.log(filterSize, filterStatus);
+
+    //lọc theo cỡ
     if (filterSize) {
-      orders = orders.filter(order => {
+      orders = orders.filter((order) => {
         if (filterSize === "all" || filterSize === "All") {
           return order;
         } else {
@@ -178,7 +194,7 @@ class App extends Component {
         }
       });
 
-      orders = orders.filter(order => {
+      orders = orders.filter((order) => {
         if (filterStatus === "all" || filterStatus === "All") {
           return order;
         } else {
@@ -186,14 +202,21 @@ class App extends Component {
         }
       });
     }
+
+    //tìm kiếm theo sđt
     if (keyword) {
       console.log("orders", orders);
-      orders = orders.filter(order => {
+      orders = orders.filter((order) => {
         return order.soDienThoai.indexOf(keyword) !== -1;
       });
     }
     var elmAddForm = isDisplayForm ? (
-      <AddOrder onSubmit={this.onSubmit} onCloseForm={this.onCloseForm} order={orderEditing} isEdit={isEdit} />
+      <AddOrder
+        onSubmit={this.onSubmit}
+        onCloseForm={this.onCloseForm}
+        order={orderEditing}
+        isEdit={isEdit}
+      />
     ) : (
       ""
     );
@@ -201,6 +224,7 @@ class App extends Component {
     return (
       <div className="main" style={{ paddingLeft: "20px" }}>
         <ToastContainer />
+        {/* modal xác nhận xoá */}
         <Modal
           style={{ opacity: 1 }}
           show={this.state.isShowDelete}
@@ -228,10 +252,15 @@ class App extends Component {
         </div>
         <div className="row">
           {isDisplayForm ? (
-            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">{elmAddForm}</div>
+            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              {elmAddForm}
+            </div>
           ) : (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <SearchAndFilter onSearch={this.onSearch} onFiltered={this.onFiltered} />
+              <SearchAndFilter
+                onSearch={this.onSearch}
+                onFiltered={this.onFiltered}
+              />
               <button
                 style={{ marginTop: "100px" }}
                 type="button"
@@ -242,7 +271,11 @@ class App extends Component {
                 Thêm sản phẩm
               </button>
               <div style={{ marginTop: "20px" }}>
-                <OrderList orders={orders} onDelete={this.onShowDelete} onEditOrder={this.onEditOrder} />
+                <OrderList
+                  orders={orders}
+                  onDelete={this.onShowDelete}
+                  onEditOrder={this.onEditOrder}
+                />
               </div>
             </div>
           )}
