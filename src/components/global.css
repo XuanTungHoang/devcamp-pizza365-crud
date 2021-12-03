@@ -1,0 +1,7 @@
+div.fade.in.modal {
+  display:flex !important;
+}
+
+.modal-dialog {
+  margin: 30vh auto 0px auto;
+}

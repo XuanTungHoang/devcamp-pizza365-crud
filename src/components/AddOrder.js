@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 //import { Button } from "react-bootstrap";
 import { Modal, Button } from "react-bootstrap";
-
+import "./global.css";
 import axios from "axios";
 class AddOrder extends Component {
   constructor(props) {
@@ -10,6 +10,7 @@ class AddOrder extends Component {
       dsDoUong: [],
       isEdit: false,
       isShowModal: false,
+      isSave: false,
       id: "",
       hoTen: "",
       email: "",
@@ -129,8 +130,19 @@ class AddOrder extends Component {
     }
   };
 
-  onSubmit = event => {
+  onHandleSubmit = event => {
     event.preventDefault();
+    if (!this.state.isEdit) {
+      this.setState({
+        isShowModal: true,
+      });
+    } else {
+      this.props.onSubmit(this.state);
+      this.onCloseForm();
+    }
+  };
+
+  onSubmit = () => {
     this.props.onSubmit(this.state);
     this.onCloseForm();
   };
@@ -141,9 +153,11 @@ class AddOrder extends Component {
 
   onShowModal = () => {
     var isValidate = this.state.idLoaiNuocUong !== "" ? true : false;
-    console.log(isValidate);
+    //  console.log(isValidate);
+
     this.setState({
-      isShowModal: isValidate,
+      isShowModal: true,
+      isSave: isValidate,
     });
   };
 
@@ -154,7 +168,11 @@ class AddOrder extends Component {
   };
 
   render() {
-    var { isEdit, dsDoUong } = this.state;
+    var { isEdit, dsDoUong, isShowModal, isSave } = this.state;
+    var val = `Xác nhận: ${this.state.hoTen}, Số điện thoại: ${this.state.soDienThoai}, địa chỉ: ${this.state.diaChi}  \n
+Menu: ${this.state.kichCo}, sườn nướng: ${this.state.suon}, salad: ${this.state.salad}g, loại nước uống: ${this.state.idLoaiNuocUong}\n
+Loại pizza: ${this.state.loaiPizza}, giá: ${this.state.thanhTien}, Mã giảm giá: ${this.state.idVourcher}\n
+Phải thanh toán: ${this.state.thanhTien} vnd`;
     return (
       <div>
         <div className="panel panel-warning">
@@ -165,7 +183,7 @@ class AddOrder extends Component {
             </h3>
           </div>
           <div className="panel-body">
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onHandleSubmit}>
               <div class="row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group">
@@ -376,13 +394,16 @@ class AddOrder extends Component {
                     Lưu Lại
                   </button>
                 ) : (
-                  <button onClick={this.onShowModal} className="btn btn-primary">
-                    Lưu Lại
+                  <button type="submit" className="btn btn-primary">
+                    Xác nhận
                   </button>
                 )}
                 <Modal
+                  size="lg"
+                  aria-labelledby="example-modal-sizes-title-lg"
+                  centered={true}
                   style={{ opacity: 1 }}
-                  show={this.state.isShowModal}
+                  show={isShowModal}
                   onHide={this.onCloseModal}
                   backdrop="static"
                   keyboard={false}
@@ -390,12 +411,78 @@ class AddOrder extends Component {
                   <Modal.Header closeButton>
                     <Modal.Title>Modal title</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>I will not close if you click outside me. Don't even try to press escape key.</Modal.Body>
+                  <Modal.Body>
+                    <form>
+                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div className="form-group">
+                          <label>Họ & Tên :</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="hoTen"
+                            required="required"
+                            disabled={true}
+                            value={this.state.hoTen}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Số điện thoại :</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            name="soDienThoai"
+                            required="required"
+                            disabled={true}
+                            value={this.state.soDienThoai}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Địa chỉ :</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="diaChi"
+                            required="required"
+                            disabled={true}
+                            value={this.state.diaChi}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Lời nhắn :</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="loiNhan"
+                            required="required"
+                            disabled={true}
+                            value={this.state.loiNhan}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Voucher Id :</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="idVourcher"
+                            required="required"
+                            disabled={true}
+                            value={this.state.idVourcher}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Thông tin chi tiết :</label>
+                          <textarea rows="9" className="form-control" disabled={true} value={val}></textarea>
+                        </div>
+                      </div>
+                    </form>
+                  </Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={this.onCloseModal}>
                       Close
                     </Button>
-                    <Button variant="primary">Confirm</Button>
+                    <Button onClick={this.onSubmit} variant="primary">
+                      Confirm
+                    </Button>
                   </Modal.Footer>
                 </Modal>
                 &nbsp;
