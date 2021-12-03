@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ConfirmOrder from "./ConfirmOrder";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import { Modal, Button, ButtonToolbar } from "react-bootstrap";
 import axios from "axios";
 class AddOrder extends Component {
   constructor(props) {
@@ -9,6 +9,7 @@ class AddOrder extends Component {
       dsDoUong: [],
       isEdit: false,
       isShowModal: false,
+      isValidated: false,
       id: "",
       hoTen: "",
       email: "",
@@ -138,13 +139,27 @@ class AddOrder extends Component {
     this.props.onCloseForm();
   };
 
+  onShowModal = () => {
+    if (this.state.idLoaiNuocUong) {
+      this.setState({
+        isShowModal: true,
+      });
+    }
+  };
+
+  onCloseModal = () => {
+    this.setState({
+      isShowModal: false,
+    });
+  };
+
   render() {
-    var { isEdit, dsDoUong } = this.state;
+    var { isEdit, dsDoUong, isShowModal } = this.state;
     //  var elmCofirmModal = isShowModal ? <ConfirmOrder addingOrder={this.state} /> : "";
     let onHideModal = () => {
       this.setState({ isShowModal: false });
     };
-    console.log(dsDoUong);
+    console.log(isShowModal);
     return (
       <div>
         {/* {isShowModal ? <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">{elmCofirmModal} </div> : ""} */}
@@ -362,21 +377,27 @@ class AddOrder extends Component {
               </div>
               <br />
               <div className="text-center">
-                <button
-                  type="submit"
-                  className="btn btn-warning"
-                  // show={this.state.isShowModal}
-                  // onHide={this.onHideModal}
-                >
+                <button onClick={this.onShowModal} className="btn btn-warning">
                   Lưu Lại
                 </button>
-                {/* <ConfirmOrder show={this.state.isShowModal} onHide={this.onHideModal} /> */}
-                {/* <ButtonToolbar>
-                  <Button type="submit" variant="warning">
-                    Lưu Lại
-                  </Button>
-                  <ConfirmOrder show={this.state.isShowModal} onHide={this.onHideModal} />
-                </ButtonToolbar> */}
+                <Modal
+                  style={{ opacity: 1 }}
+                  show={this.state.isShowModal}
+                  onHide={this.onCloseModal}
+                  backdrop="static"
+                  keyboard={false}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Modal title</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>I will not close if you click outside me. Don't even try to press escape key.</Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={this.onCloseModal}>
+                      Close
+                    </Button>
+                    <Button variant="primary">Understood</Button>
+                  </Modal.Footer>
+                </Modal>
                 &nbsp;
                 <button type="button" className="btn btn-danger" onClick={this.onCloseForm}>
                   Hủy Bỏ
