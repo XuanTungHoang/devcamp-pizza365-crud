@@ -73,6 +73,7 @@ class App extends Component {
       isDisplayForm: false,
       isEdit: false,
       isShowModal: false,
+      keyword: "",
     });
   };
 
